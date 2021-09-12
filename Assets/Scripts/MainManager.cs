@@ -20,12 +20,21 @@ public class MainManager : MonoBehaviour
 
     private bool m_GameOver = false;
 
-    //public static MainManager Instance;
+    public static MainManager Instance2;
 
     void Awake()
     {
         //MyMainManager.Instance.LoadName();
-        
+        if (Instance2 != null)       // ทำลาย Instance เพื่อไม่ให้ซ้ำซ้อนตอนเข้าออกเมนูบ่อยๆ
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance2 = this;
+        DontDestroyOnLoad(gameObject);
+
+        //MyMainManager.Instance.LoadName();
     }
 
     // Start is called before the first frame update
@@ -86,22 +95,31 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
         HighScoreCHK();
-        
+        m_Points = 0;
     }
+
 
     public void HighScoreCHK()
     {
         //................ค่อย เอา คอมเม้นออกทีหลัง ขี้เกียจ beat high score................//
 
+ 
+
         if(m_Points > MyMainManager.Instance.lastHighScore)
         {
-            //m_Name = MyMainManager.Instance.playerName;
+            m_Name = MyMainManager.Instance.playerName;
             BestScoreText.text = $"{m_Name} Got New Best Score : {m_Points}";
 
+            //ตรงนี้ถูกแล้ว เพราะ highscore save ได้
             MyMainManager.Instance.playerName = m_Name;
             MyMainManager.Instance.highScore = m_Points.ToString();
             
             MyMainManager.Instance.SaveName();
+        }
+        else if(m_Points == MyMainManager.Instance.lastHighScore)
+        {
+            MyMainManager.Instance.LoadName();
+            BestScoreText.text = $"{MyMainManager.Instance.playerName} Still Got Best Score : {MyMainManager.Instance.highScore}";
         }
         else
         {
