@@ -29,50 +29,46 @@ public class MyMainManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        LoadName();
+        LoadHighScore();
+
+        BestScoreTextMenu.text = $"{playerName} Got Best Score : {highScore}";
     }
 
     [System.Serializable]
     class SaveData
     {
         public string playerName;
-    }
-
-    class SaveData2
-    {
-
         public string highScore;
     }
 
-    public void SaveName()
+
+    public void SaveHighScore()
     {
         SaveData data = new SaveData(); //ให้ data เท่ากับ ค่าใหม่
-        SaveData2 data2 = new SaveData2();
 
-        data.playerName = playerName;     
-        data2.highScore = highScore;
+
+        data.playerName = playerName;
+        data.highScore = highScore;
+
 
         string json = JsonUtility.ToJson(data); // เรียก ToJson เก็บ data ลง json
-        string json2 = JsonUtility.ToJson(data2); // เรียก ToJson เก็บ data ลง json
+
 
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json); // ใช้ File.WriteAllText สร้างเซฟเป็น text ด้วยค่า json ก่อนหน้า
-        File.WriteAllText(Application.persistentDataPath + "/savefile2.json", json2);
+
     }
 
-    public void LoadName()
+    public void LoadHighScore()
     {
         string path = Application.persistentDataPath + "/savefile.json";
-        string path2 = Application.persistentDataPath + "/savefile2.json";
-        if (File.Exists(path) && File.Exists(path2))
+        if (File.Exists(path))
         {
             string json = File.ReadAllText(path);
-            string json2 = File.ReadAllText(path2);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
-            SaveData2 data2 = JsonUtility.FromJson<SaveData2>(json2);
             playerName = data.playerName;
-            highScore = data2.highScore;
+            highScore = data.highScore;
 
-            BestScoreTextMenu.text = $"{playerName} Got Best Score : {highScore}";
+            
 
             if (highScore != null) 
             {

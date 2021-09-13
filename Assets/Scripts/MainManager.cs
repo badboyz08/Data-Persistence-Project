@@ -16,36 +16,40 @@ public class MainManager : MonoBehaviour
     
     private bool m_Started = false;
     private int m_Points;
+    private int king_Points;
     private string m_Name;
+    private string king_Name;
 
     private bool m_GameOver = false;
 
-    public static MainManager Instance2;
+    
 
     void Awake()
     {
-        //MyMainManager.Instance.LoadName();
-        if (Instance2 != null)       // ทำลาย Instance เพื่อไม่ให้ซ้ำซ้อนตอนเข้าออกเมนูบ่อยๆ
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance2 = this;
         DontDestroyOnLoad(gameObject);
-
-        //MyMainManager.Instance.LoadName();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        CreateBlock();
+        LoadAndShowFromSave();
+    }
 
+    private void LoadAndShowFromSave()
+    {
+        MyMainManager.Instance.LoadHighScore();
+        king_Name = MyMainManager.Instance.playerName;
+        king_Points = MyMainManager.Instance.lastHighScore;
+        BestScoreText.text = $"{king_Name} Score : {king_Points}";
+    }
+
+    private void CreateBlock()
+    {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
-        
-        int[] pointCountArray = new [] {1,1,2,2,5,5};
+
+        int[] pointCountArray = new[] { 1, 1, 2, 2, 5, 5 };
         for (int i = 0; i < LineCount; ++i)
         {
             for (int x = 0; x < perLine; ++x)
@@ -73,13 +77,18 @@ public class MainManager : MonoBehaviour
 
                 Ball.transform.SetParent(null);
                 Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+
+                
             }
         }
         else if (m_GameOver)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space))
             {
+                //CreateBlock();
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+               
+                
             }
         }
     }
@@ -96,35 +105,32 @@ public class MainManager : MonoBehaviour
         GameOverText.SetActive(true);
         HighScoreCHK();
         m_Points = 0;
+        
     }
 
 
     public void HighScoreCHK()
     {
-        //................ค่อย เอา คอมเม้นออกทีหลัง ขี้เกียจ beat high score................//
-
- 
+        
 
         if(m_Points > MyMainManager.Instance.lastHighScore)
         {
-            m_Name = MyMainManager.Instance.playerName;
-            BestScoreText.text = $"{m_Name} Got New Best Score : {m_Points}";
+            
 
             //ตรงนี้ถูกแล้ว เพราะ highscore save ได้
             MyMainManager.Instance.playerName = m_Name;
             MyMainManager.Instance.highScore = m_Points.ToString();
             
-            MyMainManager.Instance.SaveName();
+            MyMainManager.Instance.SaveHighScore();
+            LoadAndShowFromSave();
         }
         else if(m_Points == MyMainManager.Instance.lastHighScore)
         {
-            MyMainManager.Instance.LoadName();
-            BestScoreText.text = $"{MyMainManager.Instance.playerName} Still Got Best Score : {MyMainManager.Instance.highScore}";
+            LoadAndShowFromSave();
         }
         else
         {
-            MyMainManager.Instance.LoadName();
-            BestScoreText.text = $"{MyMainManager.Instance.playerName} Still Got Best Score : {MyMainManager.Instance.highScore}";
+            LoadAndShowFromSave();
         }
     }
 }
