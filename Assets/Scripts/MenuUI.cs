@@ -11,18 +11,21 @@ using UnityEditor;
 
 public class MenuUI : MonoBehaviour
 {
-    
-    
 
-    public void NewNameEnter(string name)
+    
+    
+    public void SaveNewName(string name)
     {
-        // add code here to handle when a color is selected
-        //Debug.Log("name ="+name);
 
-        MyMainManager.Instance.playerName = name;//color;
+        
 
-        //Debug.Log("MyMainManager.Instance.playerName =" + MyMainManager.Instance.playerName);
+        Debug.Log("UIName =" + name);
+
+        MyMainManager.Instance.playerName = name;
+
+        Debug.Log("MyMainManager.Instance.playerName =" + MyMainManager.Instance.playerName);
     }
+    
 
     public void StartNew()
     {

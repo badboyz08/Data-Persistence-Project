@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: 
+  kingPlayerName: 
   highScore: 
   lastHighScore: 0
   BestScoreTextMenu: {fileID: 553102547}
@@ -248,7 +249,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter your name...
+  m_text: 'Name : ... Score : ...'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -395,7 +396,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Best Score : Name : 0'
+  m_Text: 'Name : ... Score : ...'
 --- !u!222 &553102548
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1581,7 +1582,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 951499242}
         m_TargetAssemblyTypeName: MenuUI, Assembly-CSharp
-        m_MethodName: NewNameEnter
+        m_MethodName: SaveNewName
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

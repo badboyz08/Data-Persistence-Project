@@ -15,23 +15,40 @@ public class MainManager : MonoBehaviour
     public GameObject GameOverText;
     
     private bool m_Started = false;
+
     private int m_Points;
     private int king_Points;
-    private string m_Name;
+
+    public string m_Name;
     private string king_Name;
+    
 
     private bool m_GameOver = false;
 
-    
+    public static MainManager Instance;
 
     void Awake()
     {
+
+        if (Instance != null)       // ทำลาย Instance เพื่อไม่ให้ซ้ำซ้อนตอนเข้าออกเมนูบ่อยๆ
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        
+
         DontDestroyOnLoad(gameObject);
+        m_Name = MyMainManager.Instance.playerName;
+        Debug.Log("Awake m_Name =" + m_Name);
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Start m_Name =" + m_Name);
         CreateBlock();
         LoadAndShowFromSave();
     }
@@ -39,9 +56,9 @@ public class MainManager : MonoBehaviour
     private void LoadAndShowFromSave()
     {
         MyMainManager.Instance.LoadHighScore();
-        king_Name = MyMainManager.Instance.playerName;
+        king_Name = MyMainManager.Instance.kingPlayerName;
         king_Points = MyMainManager.Instance.lastHighScore;
-        BestScoreText.text = $"{king_Name} Score : {king_Points}";
+        BestScoreText.text = $"Name : {king_Name} Score : {king_Points}";
     }
 
     private void CreateBlock()
@@ -85,10 +102,9 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyUp(KeyCode.Space))
             {
-                //CreateBlock();
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-               
                 
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                               
             }
         }
     }
@@ -103,6 +119,10 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+
+        
+        Debug.Log("GameOver m_Name =" + m_Name);
+
         HighScoreCHK();
         m_Points = 0;
         
@@ -115,7 +135,7 @@ public class MainManager : MonoBehaviour
 
         if(m_Points > MyMainManager.Instance.lastHighScore)
         {
-            
+            Debug.Log("HighScoreCHK m_Name =" + m_Name);
 
             //ตรงนี้ถูกแล้ว เพราะ highscore save ได้
             MyMainManager.Instance.playerName = m_Name;

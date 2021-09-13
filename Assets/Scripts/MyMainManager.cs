@@ -5,15 +5,20 @@ using UnityEngine;
 using UnityEngine.UI;
 //ต้องใช้ ตอน Serializable
 using System.IO;
-
+using TMPro;
+using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class MyMainManager : MonoBehaviour
 {
     public static MyMainManager Instance;
-    public static MainManager Instance2;
 
     public string playerName;
+    public string kingPlayerName;
     public string highScore;
+
     public int lastHighScore;
     public Text BestScoreTextMenu;
 
@@ -31,7 +36,7 @@ public class MyMainManager : MonoBehaviour
 
         LoadHighScore();
 
-        BestScoreTextMenu.text = $"{playerName} Got Best Score : {highScore}";
+        BestScoreTextMenu.text = $"Name : {kingPlayerName} Score : {highScore}";
     }
 
     [System.Serializable]
@@ -65,7 +70,7 @@ public class MyMainManager : MonoBehaviour
         {
             string json = File.ReadAllText(path);
             SaveData data = JsonUtility.FromJson<SaveData>(json);
-            playerName = data.playerName;
+            kingPlayerName = data.playerName;
             highScore = data.highScore;
 
             
@@ -78,5 +83,9 @@ public class MyMainManager : MonoBehaviour
             
         }
     }
+
+
+
+
 
 }
